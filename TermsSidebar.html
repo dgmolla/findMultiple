@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      table {border-collapse: separate; border-spacing: 15px}
+      #doc {width: 50%; height: 100%; border-right: double; padding: 10px}
+      #rightSide {width: 50%; height: 100%; padding: 10px}
+      #container {display: flex; flex-direction: column; justify-content: center; align-items: center}
+      #bottom {display: flex; margin-top: 60px}
+      #top {margin-top: 25px}
+      i {color: red}
+      #pref {border-bottom: double}
+    </style>
+  </head>
+  <body>
+      <div id="container">
+        <button onclick="onClick()">generate</button>
+        <table class="table table-striped">
+          <tr  class="bg-info">
+          </tr>
+          <tbody id="myTable">
+          </tbody>
+        </table>
+      </div>
+
+      <script>
+        function onSuccess(data){
+          var table = document.getElementById('myTable')
+
+          for (var i = 0; i < data.length; i++){
+            if (typeof data[i] != "string") {
+              var row = `<tr>
+                    <td><div onclick="onClickScroll(${i})">${data[i][1].replace(data[i][0], data[i][0].bold())}</div></td>
+                  </tr>`;
+            table.innerHTML += row;
+            }
+            else {
+              var row = `<tr>
+                    <td class="pref"><i>${data[i]}<i></td>
+                  </tr>`;
+            table.innerHTML += row;
+            }
+          }
+        }
+
+        function onClick() {
+          var data = google.script.run
+          .withFailureHandler(function(err){
+              // failure handler callback
+              console.log(err)
+            })
+           .withSuccessHandler(onSuccess)
+           .myFunction();
+
+          onSucess(data);
+        }
+
+        function onClickScroll(i) {
+          console.log(i)
+
+          google.script.run
+          .withFailureHandler(function(err){
+              // failure handler callback
+              console.log(err)
+            })
+           .scrollToTerm(i);
+        }
+
+      </script>
+
+  </body>
+</html>
